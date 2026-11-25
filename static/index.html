@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f6fa">
+  <title>WorkVision AI | منصة ذكاء السلامة المهنية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=7.0" onerror="this.onerror=null;this.href='style.css?v=7.0';">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a class="brand" href="#dashboard">
+        <div class="brand-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+        </div>
+        <div class="brand-text">
+          <strong>WorkVision <span>AI</span></strong>
+          <small>SAFETY INTELLIGENCE PLATFORM</small>
+        </div>
+      </a>
+
+      <nav class="top-nav" aria-label="التنقل الرئيسي">
+        <a class="nav-pill active" href="#dashboard">لوحة المؤشرات</a>
+        <a class="nav-pill" href="#analyzer">الفحص الذكي</a>
+        <a class="nav-pill" href="#analytics">التحليلات الإحصائية</a>
+        <a class="nav-pill" href="#results">سجل الاكتشافات</a>
+      </nav>
+
+      <div class="header-status">
+        <div class="status-badge" id="systemState">
+          <span class="pulse-dot" id="enginePulse"></span>
+          <span id="engineStatus">جارٍ فحص النماذج...</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="dashboard">
+    <section class="hero-card">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="badge-tag">COMPUTER VISION · YOLO ENGINE</span>
+          <span class="badge-sub">المراقبة الاستباقية لبيئات العمل</span>
+        </div>
+        <h1>تحليل بصري فوري لحماية الأرواح وضمان الامتثال لمعايير السلامة.</h1>
+        <p>ارفع صور الموقع أو تسجيلات الكاميرات لتشغيل نماذج الذكاء الاصطناعي الثلاثة في آنٍ واحد: رصد المخاطر وتحديد أنواعها، التحقق من معدات الوقاية الشخصية (PPE)، وتحديد كثافة الأفراد بدقة عالية مع حفظ النتائج محليًا.</p>
+        <div class="hero-cta-group">
+          <a href="#analyzer" class="btn-primary">
+            <span>بدء فحص جديد</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </a>
+          <a href="#analytics" class="btn-ghost">عرض الإحصائيات التفصيلية</a>
+          <button type="button" class="btn-ghost" id="clearSavedBtn" hidden>مسح السجل المحفوظ</button>
+        </div>
+      </div>
+
+      <div class="hero-score-card">
+        <div class="score-ring-wrap">
+          <svg class="score-ring" viewBox="0 0 120 120">
+            <circle class="ring-track" cx="60" cy="60" r="50" />
+            <circle class="ring-fill" id="safetyGaugeArc" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16" />
+          </svg>
+          <div class="score-center">
+            <strong id="heroSafetyScore">--%</strong>
+            <span>مؤشر السلامة</span>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="score-meta-row">
+            <span>حالة الامتثال</span>
+            <b id="complianceLabel">بانتظار الفحص</b>
+          </div>
+          <div class="score-meta-row">
+            <span>متوسط دقة النماذج</span>
+            <b id="heroAvgConf">—</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-label="ملخص المؤشرات">
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <span class="kpi-title">إجمالي الاكتشافات</span>
+          <span class="kpi-ico ico-slate">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <strong class="kpi-number" id="totalCount">0</strong>
+          <span class="kpi-pill neutral" id="totalRatioBadge">100%</span>
+        </div>
+        <p class="kpi-foot">مجموع العناصر المرصودة عبر جميع النماذج</p>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <span class="kpi-title">الأفراد في الموقع</span>
+          <span class="kpi-ico ico-blue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <strong class="kpi-number" id="peopleCount">0</strong>
+          <span class="kpi-pill blue" id="peopleRatioBadge">0%</span>
+        </div>
+        <p class="kpi-foot">نسبة التواجد البشري من إجمالي الرصد</p>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <span class="kpi-title">المخاطر المرصودة</span>
+          <span class="kpi-ico ico-amber">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <strong class="kpi-number" id="hazardCount">0</strong>
+          <span class="kpi-pill amber" id="hazardRatioBadge">0%</span>
+        </div>
+        <div class="kpi-tags" id="hazardTypesMini">
+          <span class="kpi-foot">لا توجد مخاطر مسجلة بعد</span>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-head">
+          <span class="kpi-title">معدات الوقاية (PPE)</span>
+          <span class="kpi-ico ico-emerald">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </span>
+        </div>
+        <div class="kpi-body">
+          <strong class="kpi-number" id="ppeCount">0</strong>
+          <span class="kpi-pill emerald" id="ppeRatioBadge">0%</span>
+        </div>
+        <div class="kpi-tags" id="ppeTypesMini">
+          <span class="kpi-foot">عناصر الحماية الشخصية المكتشفة</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-block" id="analyzer">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">01 · WORKSPACE</span>
+          <h2>منطقة الفحص والتحليل الذكي</h2>
+        </div>
+        <p>ارفع ملف وسائط، اختر النماذج، واضبط حساسية الثقة لبدء المعالجة.</p>
+      </div>
+
+      <div class="workspace-grid">
+        <div class="card control-card">
+          <label class="dropzone" id="dropzone" for="fileInput">
+            <div class="drop-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <strong>اسحب الصورة أو الفيديو وأفلته هنا</strong>
+            <span>أو انقر للاستعراض من جهازك</span>
+            <small>JPG · PNG · WEBP · BMP · MP4 · MOV · AVI · MKV</small>
+            <input type="file" id="fileInput" accept="image/*,video/mp4,video/quicktime,video/x-msvideo,video/x-matroska">
+          </label>
+
+          <div class="selected-file" id="filePreview" hidden>
+            <div class="file-badge">FILE</div>
+            <div class="file-details">
+              <strong id="fileName">—</strong>
+              <span id="fileSize">—</span>
+            </div>
+            <button type="button" class="btn-remove" id="removeFile" title="إزالة الملف">✕</button>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label>النماذج النشطة للفحص</label>
+              <span>3 محركات متاحة</span>
+            </div>
+            <div class="model-selector-grid">
+              <label class="model-tile">
+                <input type="checkbox" value="hazard" checked>
+                <div class="tile-content">
+                  <span class="tile-dot dot-amber"></span>
+                  <div>
+                    <strong>المخاطر</strong>
+                    <small>Hazard</small>
+                  </div>
+                </div>
+              </label>
+
+              <label class="model-tile">
+                <input type="checkbox" value="ppe" checked>
+                <div class="tile-content">
+                  <span class="tile-dot dot-emerald"></span>
+                  <div>
+                    <strong>معدات الوقاية</strong>
+                    <small>PPE Gear</small>
+                  </div>
+                </div>
+              </label>
+
+              <label class="model-tile">
+                <input type="checkbox" value="person" checked>
+                <div class="tile-content">
+                  <span class="tile-dot dot-blue"></span>
+                  <div>
+                    <strong>الأشخاص</strong>
+                    <small>Persons</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="confidence">عتبة الثقة الدنيا (Confidence Threshold)</label>
+              <strong class="conf-readout" id="confidenceValue">35%</strong>
+            </div>
+            <input type="range" id="confidence" min="5" max="95" value="35">
+            <div class="range-ticks">
+              <span>5% (حساسية عالية)</span>
+              <span>50%</span>
+              <span>95% (دقة صارمة)</span>
+            </div>
+          </div>
+
+          <button class="btn-submit" id="analyzeBtn" disabled>
+            <span>تشغيل التحليل بالذكاء الاصطناعي</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+
+          <div class="progress-box" id="progressWrap" hidden>
+            <div class="progress-meta">
+              <span id="progressText">جارٍ معالجة الملف...</span>
+              <strong id="progressPercent">0%</strong>
+            </div>
+            <div class="progress-rail"><i id="progressBar"></i></div>
+          </div>
+        </div>
+
+        <div class="card stage-card">
+          <div class="stage-header">
+            <div class="stage-title">
+              <span class="stage-indicator"></span>
+              <strong>منصة المعاينة البصرية</strong>
+            </div>
+            <span class="stage-status" id="previewState">بانتظار رفع الملف</span>
+          </div>
+
+          <div class="preview-stage" id="previewStage">
+            <div class="empty-preview">
+              <div class="empty-art">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <strong>لا توجد وسائط معروضة حالياً</strong>
+              <small>ستظهر هنا المعاينة الأصلية ثم النتائج المرسومة بإطارات التحديد</small>
+            </div>
+          </div>
+
+          <div class="stage-footer">
+            <div class="legend-inline">
+              <span><i class="lg-blue"></i> أشخاص</span>
+              <span><i class="lg-amber"></i> مخاطر</span>
+              <span><i class="lg-emerald"></i> معدات وقاية</span>
+            </div>
+            <span class="tech-tag">YOLO INFERENCE ENGINE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block" id="analytics">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">02 · ANALYTICS & TELEMETRY</span>
+          <h2>الإحصائيات وتفصيل أنواع المخاطر ومعدات الوقاية</h2>
+        </div>
+        <p>تحليل توزيع الفئات، مسميات المخاطر الدقيقة، ومستويات ثقة النماذج.</p>
+      </div>
+
+      <div class="breakdown-grid">
+        <article class="card breakdown-card hazard-border">
+          <div class="card-top">
+            <div>
+              <h3>تفصيل المخاطر المكتشفة حسب النوع</h3>
+              <p>المسميات الدقيقة للمخاطر التي رصدها النموذج وعدد مرات ظهورها</p>
+            </div>
+            <span class="chip-outline amber-chip" id="hazardUniqueTag">0 نوع</span>
+          </div>
+          <div class="class-list" id="hazardBreakdownList">
+            <div class="chart-empty">لم يتم رصد أي مخاطر بعد. ستظهر هنا أنواع المخاطر وتفاصيلها عند التحليل.</div>
+          </div>
+        </article>
+
+        <article class="card breakdown-card ppe-border">
+          <div class="card-top">
+            <div>
+              <h3>تفصيل معدات الوقاية (PPE) المكتشفة</h3>
+              <p>العناصر الوقائية المرصودة في المشهد ونسبة تكرار كل عنصر</p>
+            </div>
+            <span class="chip-outline emerald-chip" id="ppeUniqueTag">0 نوع</span>
+          </div>
+          <div class="class-list" id="ppeBreakdownList">
+            <div class="chart-empty">لم يتم رصد معدات وقاية بعد. ستظهر هنا قائمة المعدات وتكرارها عند التحليل.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="analytics-bento" style="margin-top: 18px;">
+        <article class="card analytics-card">
+          <div class="card-top">
+            <div>
+              <h3>التوزيع النسبي للاكتشافات</h3>
+              <p>تحليل حصة كل فئة رئيسية من إجمالي العناصر المكتشفة</p>
+            </div>
+            <span class="chip-outline" id="analyticsTotalTag">0 عنصر</span>
+          </div>
+
+          <div class="donut-layout">
+            <div class="donut-box" id="donutChartWrap">
+              <svg viewBox="0 0 140 140" class="donut-svg">
+                <circle cx="70" cy="70" r="54" class="donut-bg" />
+                <circle cx="70" cy="70" r="54" class="donut-seg seg-blue" id="segPeople" stroke-dasharray="0 339.29" stroke-dashoffset="0" />
+                <circle cx="70" cy="70" r="54" class="donut-seg seg-amber" id="segHazard" stroke-dasharray="0 339.29" stroke-dashoffset="0" />
+                <circle cx="70" cy="70" r="54" class="donut-seg seg-emerald" id="segPpe" stroke-dasharray="0 339.29" stroke-dashoffset="0" />
+              </svg>
+              <div class="donut-center">
+                <strong id="donutTotal">0</strong>
+                <span>إجمالي</span>
+              </div>
+            </div>
+
+            <div class="distribution-bars" id="distributionChart">
+              <div class="chart-empty">ستظهر الأشرطة الإحصائية والنسب المئوية فور اكتمال أول عملية تحليل.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card telemetry-card">
+          <div class="card-top">
+            <div>
+              <h3>مؤشرات الجودة والامتثال</h3>
+              <p>مقاييس مستخرجة من بيانات الرصد الحالية</p>
+            </div>
+          </div>
+
+          <div class="sub-kpi-grid">
+            <div class="sub-kpi">
+              <span>متوسط ثقة الاكتشاف</span>
+              <strong id="avgConfidenceStat">—</strong>
+              <small>دقة التنبؤ العامة</small>
+            </div>
+            <div class="sub-kpi">
+              <span>أعلى درجة ثقة</span>
+              <strong id="maxConfidenceStat">—</strong>
+              <small>أقوى رصد في المشهد</small>
+            </div>
+            <div class="sub-kpi">
+              <span>معدل المخاطر</span>
+              <strong id="hazardRateStat">0%</strong>
+              <small>نسبة الخطر للإجمالي</small>
+            </div>
+            <div class="sub-kpi">
+              <span>تغطية PPE / فرد</span>
+              <strong id="ppeCoverageStat">—</strong>
+              <small>نسبة الوقاية للأفراد</small>
+            </div>
+          </div>
+
+          <div class="models-health-list">
+            <div class="mh-item">
+              <span class="mh-dot amber"></span>
+              <div class="mh-name"><b>نموذج المخاطر</b><small>Hazard YOLO</small></div>
+              <span class="mh-pill" id="modelStatusHazard">جاهز</span>
+            </div>
+            <div class="mh-item">
+              <span class="mh-dot emerald"></span>
+              <div class="mh-name"><b>نموذج الوقاية</b><small>PPE YOLO</small></div>
+              <span class="mh-pill" id="modelStatusPpe">جاهز</span>
+            </div>
+            <div class="mh-item">
+              <span class="mh-dot blue"></span>
+              <div class="mh-name"><b>نموذج الأشخاص</b><small>Person YOLO</small></div>
+              <span class="mh-pill" id="modelStatusPerson">جاهز</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block" id="results">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">03 · DETECTION LOG</span>
+          <h2>سجل الاكتشافات والتصدير</h2>
+        </div>
+        <p id="resultCount">لا توجد نتائج مسجلة بعد</p>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-controls">
+          <div class="filter-pills" id="filterPills">
+            <button type="button" class="filter-btn active" data-filter="all">الكل</button>
+            <button type="button" class="filter-btn" data-filter="hazard">المخاطر</button>
+            <button type="button" class="filter-btn" data-filter="ppe">معدات الوقاية</button>
+            <button type="button" class="filter-btn" data-filter="person">الأشخاص</button>
+          </div>
+          <div class="search-box">
+            <input type="search" id="tableSearch" placeholder="بحث باسم الفئة أو النموذج...">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>النموذج</th>
+                <th>الفئة المكتشفة</th>
+                <th>مستوى الثقة</th>
+                <th>الإطار / التوقيت</th>
+                <th>إحداثيات المربع (Box)</th>
+              </tr>
+            </thead>
+            <tbody id="detectionRows">
+              <tr>
+                <td colspan="5" class="empty-row">ارفع صورة أو مقطع فيديو وابدأ التحليل لعرض السجل التفصيلي هنا.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="export-bar" id="downloadRow" hidden>
+          <div class="export-info">
+            <strong>التقارير جاهزة للتنزيل</strong>
+            <span>تتضمن جميع الإحصائيات والبيانات الخام لعملية الفحص</span>
+          </div>
+          <div class="export-actions">
+            <a id="pdfLink" class="export-btn primary" target="_blank">تقرير PDF تنفيذي ↓</a>
+            <a id="csvLink" class="export-btn" target="_blank">جدول CSV ↓</a>
+            <a id="jsonLink" class="export-btn" target="_blank">بيانات JSON ↓</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <span>WorkVision AI — منصة ذكاء السلامة المهنية</span>
+      <span>النتائج استرشادية لدعم قرارات السلامة وتخضع للمراجعة البشرية</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js?v=7.0" onerror="this.onerror=null;this.src='app.js?v=7.0';"></script>
+</body>
+</html>
